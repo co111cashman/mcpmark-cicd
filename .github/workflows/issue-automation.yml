@@ -3,6 +3,7 @@ name: Issue Management Automation
 on:
   issues:
     types: [opened, labeled]
+  workflow_dispatch:
 
 jobs:
   issue-triage:
@@ -11,6 +12,9 @@ jobs:
     permissions:
       issues: write
     steps:
+      - name: Debug - Workflow triggered
+        run: echo "Workflow triggered by ${{ github.event_name }} action ${{ github.event.action }} for issue #${{ github.event.issue.number }}"
+        
       - name: Checkout repository
         uses: actions/checkout@v4
         
@@ -217,7 +221,7 @@ jobs:
             // Update parent issue with task checklist
             if (createdIssues.length > 0) {
               let checklist = '## Epic Tasks\n\n';
-              createdIssues.forEach((issue, index) => {
+              createdIssues.forEach((issue, index) {
                 checklist += `- [ ] #${issue.number} ${issue.title}\n`;
               });
               
